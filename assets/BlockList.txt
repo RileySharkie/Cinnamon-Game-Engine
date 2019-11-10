@@ -1,0 +1,3 @@
+0: Darkstone
+1: Stone
+
