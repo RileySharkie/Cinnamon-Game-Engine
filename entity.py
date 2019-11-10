@@ -1,14 +1,15 @@
 
 
 class Entity:
+    visible = True
+    live = False
+    location = (0, 0)
+    spriteList = []
+    current_sprite = None
+    try_move = 0
 
-    def __init__(self):
-        self.visible = True
-        self.live = False
-        self.location = (0, 0)
-        self. spriteList = []
-        self.current_sprite = None
-        self.try_move = 0
+    def __init__(self, loc):
+        self.location = loc
 
 
 
