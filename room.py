@@ -11,19 +11,13 @@ class Room:
     cameraStartY = 0
     entityList = []
     spriteList = {}
+    room_name = ''
 
     def __init__(self):
         self.width = 800
-        self.height = 600
+        self.height = 640
         self.cameraStartX = 0
         self.cameraStartY = 0
-
-        self.player = Player()
-
-        self.player2 = Player()
-        self.player2.location = (30, 30)
-        self.add_entity(self.player)
-        self.add_entity(self.player2)
 
     def add_entity(self, entity):
         self.entityList.append(entity)
@@ -31,6 +25,10 @@ class Room:
             for item in entity.get_sprites():
                 if item not in self.spriteList:
                     self.spriteList[item] = sprite.Sprite('assets/sprites/' + item + '.png')
+
+    def add_multi(self, tile_set):
+        for item in tile_set:
+            self.add_entity(item)
 
     def blit(self):
         blit_list = []

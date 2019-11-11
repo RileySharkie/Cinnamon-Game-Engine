@@ -1,12 +1,12 @@
 import pygame
 import controls
-import testroom
+import debugroom
 import player
 
 pygame.init()
 
 # the screen
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((800, 640))
 
 
 pygame.display.set_caption("Cinnamon")
@@ -15,7 +15,7 @@ pygame.display.set_caption("Cinnamon")
 
 controls = controls.Controls()
 
-room = testroom.TestRoom()
+room = debugroom.DebugRoom()
 
 clock = pygame.time.Clock()
 
