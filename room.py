@@ -43,3 +43,13 @@ class Room:
             if item.is_live():
                 live_list.append(item)
         return live_list
+
+    # iterate through the entity list. live entities are called
+    # this will allow objects to take any actions that they might take
+    # this includes player inputs
+    def check_action(self, controls):
+        for item in self.get_live():
+            if type(item) is Player:
+                item.action(self.entityList, controls)
+            else:
+                item.action(self.entityList)

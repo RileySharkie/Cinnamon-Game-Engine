@@ -31,11 +31,7 @@ while running:
             controls.key_up(event)
 
     #actions are taken here
-    for entity in room.get_live():
-        if type(entity) is player.Player:
-            entity.action(controls)
-        else:
-            entity.action()
+    room.check_action(controls)
 
 
 

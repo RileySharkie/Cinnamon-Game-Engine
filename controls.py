@@ -6,31 +6,28 @@ class Controls:
     # controls defined
     k_left = pygame.K_LEFT
     k_right = pygame.K_RIGHT
+    k_up = pygame.K_UP
+    k_down = pygame.K_DOWN
 
     def __init__(self):
         self.left = False
         self.right = False
+        self.up = False
+        self. down = False
         self.key_dict = {
-            self.k_left: self.set_left,
-            self.k_right: self.set_right
-
+            self.k_left: 'left',
+            self.k_right: 'right',
+            self.k_up: 'up',
+            self.k_down: 'down'
         }
-
-    def set_left(self, bool):
-        self.left = bool
-
-    def set_right(self, bool):
-        self.right = bool
-
-    def get_key(self, key):
-        return self.key_dict[key]
 
     def key_down(self, event):
         for key, control in self.key_dict.items():
             if event.key == key:
-                control(True)
+                setattr(self, control, True)
 
     def key_up(self, event):
         for key, control in self.key_dict.items():
             if event.key == key:
-                control(False)
+                setattr(self, control, False)
+

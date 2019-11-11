@@ -1,6 +1,7 @@
 import pygame as pg
 import room as r
 import entities
+import player
 
 
 def architect(room_name):
@@ -24,7 +25,8 @@ def architect(room_name):
     for line in data:
         for entry in line:
             if entry != '0':
-                tile_list.append((entry, (xpos, ypos)))
+                pydoc, item = entry.split('.')
+                tile_list.append((pydoc, item, (xpos, ypos)))
             xpos += grid
         xpos = 0
         ypos += grid
@@ -32,8 +34,8 @@ def architect(room_name):
     # a new list is created, this one holding objects that are initialized based on the previously parsed data
     entity_list = []
     for item in tile_list:
-        ent, coord = item
-        method = getattr(entities, ent)  # this line gets the iterators from the entities file
+        pydoc, ent, coord = item
+        method = getattr(eval(pydoc), ent)  # this line gets the iterators from the entities file
         entity_list.append(method(coord))  # objects are created and added to the list
 
     return entity_list  #the list is returned

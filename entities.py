@@ -4,7 +4,7 @@ grid_size = 32
 
 class Block(entity.Entity):
     def __init__(self, loc):
-        super(entity.Entity, self).__init__(loc)
+        super().__init__(loc)
         self.live = False
         self.visible = True
         self.solid = True
@@ -14,7 +14,7 @@ class Block(entity.Entity):
 
 class DarkStone(Block):
     def __init__(self, loc):
-        super(Block, self).__init__(loc)
+        super().__init__(loc)
         self.spriteList.append('darkstone')
         self.current_sprite = 'darkstone'
 
@@ -22,6 +22,6 @@ class DarkStone(Block):
 
 class Stone(Block):
     def __init__(self, loc):
-        super(Block, self).__init__(loc)
+        super().__init__(loc)
         self.spriteList.append('stone')
         self.current_sprite = 'stone'

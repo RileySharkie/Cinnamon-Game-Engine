@@ -11,7 +11,7 @@ class Sprite:
     def get(self):
         return self.sprite
 
-    def get_widtch(self):
+    def get_width(self):
         return self.sprite.get_widtch()
 
     def get_height(self):
