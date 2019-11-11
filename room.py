@@ -12,6 +12,7 @@ class Room:
     entityList = []
     spriteList = {}
     room_name = ''
+    gravity = 5
 
     def __init__(self):
         self.width = 800

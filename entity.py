@@ -9,6 +9,13 @@ class Entity:
     try_move = 0
     width = 0
     height = 0
+    x_speed = 0
+    y_speed = 0
+    grounded = False
+    jump_speed = 24
+    gravity = 2
+    max_fall_speed = 24
+    move_speed = 14
 
     def __init__(self, loc):
         self.location = loc
@@ -40,6 +47,18 @@ class Entity:
     def action(self, entity_list):
         pass
     # this class is inherited. it will be called each frame only if the entity is living
+
+    def is_grounded(self, entity_list, check_for):
+        x, y = self.location
+        x, y = self.location
+        self.grounded = self.collision_line(entity_list, (x, y + self.height + 1),
+                                            (x + self.width, y + self.height + 1), check_for)
+
+    def hit_head(self, entity_list, check_for):
+        # this method is called when an entity is jumping. If the entity hits a cieling, its y momentum stops
+        x, y = self.location
+        if self.collision_line(entity_list, (x, y - 1), (x + self.width, y -+ 1), check_for):
+            self.y_speed = 0
 
     def move(self, entity_list, destination, check_for):
         # establish start location and desired end location
@@ -82,12 +101,26 @@ class Entity:
         # the new x,y location is returned
         return final_x, final_y
 
+    def collision_line(self, entity_list, line_start, line_end, check_for):
+        # this checks if any entities in the entity_list, meeting the parameter criteria of check_for, are found at a
+        # given line between two coordinates on the same plane
+        lbound, tbound = line_start
+        rbound, bbound = line_end
+        for item in entity_list:
+            if item == self:
+                continue
+            if getattr(item, check_for):  # check to see if the item meets the criteria
+                if self.collision((lbound, tbound, rbound, bbound), item.get_bounds()):
+                    return True
+        # none of the items returned a collision. there were no collisions. return false to indicate this
+        return False
+
+
     def collision_var(self, entity_list, check_location, check_for):
         # this checks if any entities in the entity_list, meeting the parameter criteria of check_for, are found at the
         # given location. returns false if no collision is found, true if otherwise
         lbound, tbound = check_location
-        x, y = check_location
-        rbound, bbound = x + self.width, y + self.height
+        rbound, bbound = lbound + self.width, tbound + self.height
         for item in entity_list:
             if item == self:
                 continue
