@@ -7,11 +7,12 @@ class Entity:
     spriteList = []
     current_sprite = None
     try_move = 0
+    solid = False
+    width = 0
+    height = 0
 
     def __init__(self, loc):
         self.location = loc
-
-
 
     def get_sprites(self):
         return self.spriteList

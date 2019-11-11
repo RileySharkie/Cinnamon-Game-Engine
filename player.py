@@ -8,6 +8,8 @@ class Player(entity.Entity):
         self.spriteList.append('player')
         self.current_sprite = 'player'
         self.live = True
+        self.width = 40
+        self.height = 56
 
     def action(self, controls):
         self.try_move = 0
