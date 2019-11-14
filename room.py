@@ -1,14 +1,13 @@
 import pygame
 import sprite
 from player import Player
+from camera import Camera
 
 
 class Room:
 
     width = 0
     height = 0
-    cameraStartX = 0
-    cameraStartY = 0
     entityList = []
     spriteList = {}
     room_name = ''
@@ -17,11 +16,16 @@ class Room:
     def __init__(self):
         self.width = 800
         self.height = 640
-        self.cameraStartX = 0
-        self.cameraStartY = 0
+        self.player = None
+        self.camera = Camera(self.width, self.height)
+
+    def get_player(self):
+        return self.player
 
     def add_entity(self, entity):
         self.entityList.append(entity)
+        if type(entity) is Player:
+            self.player = entity
         if entity.is_visible():
             for item in entity.get_sprites():
                 if item not in self.spriteList:
@@ -32,10 +36,16 @@ class Room:
             self.add_entity(item)
 
     def blit(self):
+        camerax, cameray = self.camera.location
+        cameraw, camerah = self.camera.width, self.camera.height
         blit_list = []
         for item in self.entityList:
             if item.is_visible():
-                blit_list.append((self.spriteList[item.get_current_sprite()].get(), item.get_location()))
+                curr_sprite = self.spriteList[item.get_current_sprite()].get()
+                x, y = item.get_location()
+                # check to see if the item is visible (if it is in the camera's view)
+                if (x + curr_sprite.get_width() >= camerax or x <= camerax + cameraw) and (y + curr_sprite.get_height() >= cameray or y <= cameray + camerah):
+                    blit_list.append((curr_sprite, (x - camerax, y - cameray)))
         return blit_list
 
     def get_live(self):

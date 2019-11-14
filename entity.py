@@ -1,7 +1,7 @@
 
 
 class Entity:
-    visible = True
+    visible = False
     live = False
     location = (0, 0)
     spriteList = []

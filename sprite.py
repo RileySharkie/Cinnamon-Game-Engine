@@ -12,7 +12,7 @@ class Sprite:
         return self.sprite
 
     def get_width(self):
-        return self.sprite.get_widtch()
+        return self.sprite.get_width()
 
     def get_height(self):
         return self.sprite.get_height()

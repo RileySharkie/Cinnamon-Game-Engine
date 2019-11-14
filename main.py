@@ -33,7 +33,8 @@ while running:
     #actions are taken here
     room.check_action(controls)
 
-
+    #move the camera if needed
+    room.camera.follow()
 
     screen.fill((0, 0, 0))
     # updating the display is the last thing that happens

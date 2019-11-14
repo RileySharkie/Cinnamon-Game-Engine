@@ -4,6 +4,7 @@ import entity
 class Player(entity.Entity):
 
     live = True
+    visible = True
     width = 40
     height = 56
 

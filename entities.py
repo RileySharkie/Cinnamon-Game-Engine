@@ -6,8 +6,8 @@ class Block(entity.Entity):
     def __init__(self, loc):
         super().__init__(loc)
         self.live = False
-        self.visible = True
         self.solid = True
+        self.visible = True
         self.width = grid_size
         self.height = grid_size
 
