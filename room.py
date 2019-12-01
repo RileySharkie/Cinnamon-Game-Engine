@@ -2,6 +2,7 @@ import pygame
 import sprite
 from player import Player
 from camera import Camera
+import spritemaster
 
 
 class Room:
@@ -29,7 +30,8 @@ class Room:
         if entity.is_visible():
             for item in entity.get_sprites():
                 if item not in self.spriteList:
-                    self.spriteList[item] = sprite.Sprite('assets/sprites/' + item + '.png')
+                    self.spriteList[item] = spritemaster.get(item)
+                    # self.spriteList[item] = sprite.Sprite('assets/sprites/' + item + '.png')
 
     def add_multi(self, tile_set):
         for item in tile_set:
@@ -41,11 +43,13 @@ class Room:
         blit_list = []
         for item in self.entityList:
             if item.is_visible():
-                curr_sprite = self.spriteList[item.get_current_sprite()].get()
+                curr_sprite = self.spriteList[item.get_current_sprite()]
+                frame = item.advance_frame()
                 x, y = item.get_location()
+                or_x, or_y = curr_sprite.origin  # account for any skew from sprite origin
                 # check to see if the item is visible (if it is in the camera's view)
-                if (x + curr_sprite.get_width() >= camerax or x <= camerax + cameraw) and (y + curr_sprite.get_height() >= cameray or y <= cameray + camerah):
-                    blit_list.append((curr_sprite, (x - camerax, y - cameray)))
+                if (x + curr_sprite.get_width() - or_x >= camerax or x + or_x <= camerax + cameraw) and (y + curr_sprite.get_height() - or_y >= cameray or y + or_y <= cameray + camerah):
+                    blit_list.append((curr_sprite.get(), (x - camerax, y - cameray), curr_sprite.get_frame(frame)))
         return blit_list
 
     def get_live(self):

@@ -1,14 +1,17 @@
-
+import spritemaster
 
 class Entity:
     visible = False
     live = False
-    location = (0, 0)
     spriteList = []
     current_sprite = None
-    try_move = 0
+    frame = -1  # the number of frames that the current sprite has
+    current_frame = 0  # the current frame of animation in the sprite
+    sprite_speed = 0  # this value indicates how many frames go by before the sprite frame increments
+    sprite_timer = 0  # this timer increments by one each frame. when it hits the sprite_speed value, it resets and the current frame increments
     width = 0
     height = 0
+    bounds = 0, 0, 0, 0
     x_speed = 0
     y_speed = 0
     grounded = False
@@ -25,7 +28,7 @@ class Entity:
         return self.spriteList
 
     def get_bounds(self):
-        #returns the left, top, right, bottom bounds, in that order
+        # returns the left, top, right, bottom bounds, in that order
         x, y = self.location
         return x, y, x + self.width, y + self.height
 
@@ -40,6 +43,29 @@ class Entity:
 
     def get_current_sprite(self):
         return self.current_sprite
+
+    def set_current_sprite(self, sprite):
+        self.current_sprite = sprite
+        new_sprite = spritemaster.get(sprite)
+        self.frame = new_sprite.get_frames()
+        self.height = new_sprite.get_height()
+        self.width = new_sprite.get_width()
+        self.bounds = new_sprite.get_hitbox()
+        self.sprite_speed = new_sprite.get_speed()
+        self.current_frame = 0
+        self.sprite_timer = 0
+
+    def advance_frame(self):
+        curr_frame = self.current_frame
+        if self.frame > -1:
+            self.sprite_timer += 1
+            if self.sprite_timer == self.sprite_speed:
+                self.sprite_timer = 0
+                self.current_frame += 1
+                if self.current_frame == self.frame:
+                    self.current_frame = 0
+            return curr_frame
+        return -1
 
     def get_location(self):
         return self.location
@@ -119,8 +145,11 @@ class Entity:
     def collision_var(self, entity_list, check_location, check_for):
         # this checks if any entities in the entity_list, meeting the parameter criteria of check_for, are found at the
         # given location. returns false if no collision is found, true if otherwise
+        left, top, right, bot = self.bounds
         lbound, tbound = check_location
-        rbound, bbound = lbound + self.width, tbound + self.height
+        lbound += left
+        tbound += top
+        rbound, bbound = lbound + right, tbound + bot
         for item in entity_list:
             if item == self:
                 continue
@@ -133,9 +162,12 @@ class Entity:
     def collision_type(self, entity_list, check_location, type):
         # this checks if any entities in the entity_list, being the same type as indicated, are found at the
         # given location. returns false if no collision is found, true if otherwise
+        left, top, right, bot = self.bounds
         lbound, tbound = check_location
+        lbound += left
+        tbound += top
         x, y = check_location
-        rbound, bbound = x + self.width, y + self.height
+        rbound, bbound = x + right, y + bot
         for item in entity_list:
             if type(item) == type:  # check to see if the item is the desired type
                 if self.collision((lbound, tbound, rbound, bbound), item.get_bounds()):

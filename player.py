@@ -5,14 +5,16 @@ class Player(entity.Entity):
 
     live = True
     visible = True
-    width = 40
+    width = 73
     height = 56
 
     def __init__(self, loc):
         super().__init__(loc)
         self.spriteList.append('player')
-        self.current_sprite = 'player'
+        self.set_current_sprite('player')
         self.location = loc
+
+
 
     def action(self, entity_list, controls):
         self.is_grounded(entity_list, 'solid')

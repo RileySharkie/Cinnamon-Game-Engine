@@ -30,17 +30,17 @@ while running:
         if event.type == pygame.KEYUP:
             controls.key_up(event)
 
-    #actions are taken here
+    # actions are taken here
     room.check_action(controls)
 
-    #move the camera if needed
+    # move the camera if needed
     room.camera.follow()
 
     screen.fill((0, 0, 0))
     # updating the display is the last thing that happens
-    for blit_pair in room.blit():
-        (blit_item, blit_location) = blit_pair
-        screen.blit(blit_item, blit_location)
+    for blit_item in room.blit():
+        (blit_sprite, blit_location, crop) = blit_item
+        screen.blit(blit_sprite, blit_location, crop)
 
     pygame.display.update()
     clock.tick(30)
