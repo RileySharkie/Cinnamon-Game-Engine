@@ -21,6 +21,7 @@ clock = pygame.time.Clock()
 
 running = True
 while running:
+    controls.reset()  # resets key presses where needed
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -39,8 +40,8 @@ while running:
     screen.fill((0, 0, 0))
     # updating the display is the last thing that happens
     for blit_item in room.blit():
-        (blit_sprite, blit_location, crop) = blit_item
-        screen.blit(blit_sprite, blit_location, crop)
+        (blit_sprite, blit_location, crop, flip) = blit_item
+        screen.blit(pygame.transform.flip(blit_sprite, flip, False), blit_location, crop)
 
     pygame.display.update()
     clock.tick(30)

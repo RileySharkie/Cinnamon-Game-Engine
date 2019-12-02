@@ -3,14 +3,14 @@ import pygame
 
 class Sprite:
 
-    frames = 0
+    frames = -1
     width = 0
     height = 0
     origin = 0, 0
     hitbox = 0, 0, 0, 0  # left, top, right, bottom
     speed = 0  # the speed at which the sprite animates
 
-    def __init__(self, get_string, frames=0, origin=(0, 0), width=0, height=0, hitbox=(0, 0, 0, 0), speed = 2):
+    def __init__(self, get_string, frames=-1, origin=(0, 0), width=0, height=0, hitbox=(0, 0, 0, 0), speed = 2):
 
         self.sprite = pygame.image.load(get_string)
         self.sprite.set_colorkey((255, 0, 255))

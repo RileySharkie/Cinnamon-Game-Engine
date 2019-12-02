@@ -16,7 +16,7 @@ class DarkStone(Block):
     def __init__(self, loc):
         super().__init__(loc)
         self.spriteList.append('darkstone')
-        self.current_sprite = 'darkstone'
+        self.set_current_sprite('darkstone')
 
 
 
@@ -24,4 +24,4 @@ class Stone(Block):
     def __init__(self, loc):
         super().__init__(loc)
         self.spriteList.append('stone')
-        self.current_sprite = 'stone'
+        self.set_current_sprite('stone')

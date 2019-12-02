@@ -9,6 +9,7 @@ class Entity:
     current_frame = 0  # the current frame of animation in the sprite
     sprite_speed = 0  # this value indicates how many frames go by before the sprite frame increments
     sprite_timer = 0  # this timer increments by one each frame. when it hits the sprite_speed value, it resets and the current frame increments
+    flip = False  # false, facing right. true, facing left
     width = 0
     height = 0
     bounds = 0, 0, 0, 0
@@ -16,7 +17,9 @@ class Entity:
     y_speed = 0
     grounded = False
     jump_speed = 24
-    gravity = 2
+    jump_extend_max = 20
+    jump_extend = 0
+    gravity = 4
     max_fall_speed = 24
     move_speed = 14
 
@@ -30,7 +33,13 @@ class Entity:
     def get_bounds(self):
         # returns the left, top, right, bottom bounds, in that order
         x, y = self.location
-        return x, y, x + self.width, y + self.height
+        left, top, right, bot = self.bounds
+        lbound = x + left
+        tbound = y + top
+        rbound = x + right
+        bbound = y + bot
+        return lbound, tbound, rbound, bbound
+        #return self.bounds
 
     def is_visible(self):
         return self.visible
@@ -76,15 +85,18 @@ class Entity:
 
     def is_grounded(self, entity_list, check_for):
         x, y = self.location
-        x, y = self.location
-        self.grounded = self.collision_line(entity_list, (x, y + self.height + 1),
-                                            (x + self.width, y + self.height + 1), check_for)
+        left, top, right, bot = self.bounds
+        self.grounded = self.collision_line(entity_list, (x + left, y + bot + 1),
+                                            (x + right, y + bot + 1), check_for)
 
     def hit_head(self, entity_list, check_for):
         # this method is called when an entity is jumping. If the entity hits a cieling, its y momentum stops
         x, y = self.location
-        if self.collision_line(entity_list, (x, y - 1), (x + self.width, y -+ 1), check_for):
+        left, top, right, bot = self.bounds
+        if self.collision_line(entity_list, (x + left, y + top - 1), (x + right, y + top - 1), check_for):
             self.y_speed = 0
+            return True
+        return False
 
     def move(self, entity_list, destination, check_for):
         # establish start location and desired end location
@@ -141,15 +153,16 @@ class Entity:
         # none of the items returned a collision. there were no collisions. return false to indicate this
         return False
 
-
     def collision_var(self, entity_list, check_location, check_for):
         # this checks if any entities in the entity_list, meeting the parameter criteria of check_for, are found at the
         # given location. returns false if no collision is found, true if otherwise
-        left, top, right, bot = self.bounds
         lbound, tbound = check_location
+        rbound, bbound = check_location
+        left, top, right, bot = self.bounds
         lbound += left
         tbound += top
-        rbound, bbound = lbound + right, tbound + bot
+        rbound += right
+        bbound += bot
         for item in entity_list:
             if item == self:
                 continue
@@ -162,12 +175,13 @@ class Entity:
     def collision_type(self, entity_list, check_location, type):
         # this checks if any entities in the entity_list, being the same type as indicated, are found at the
         # given location. returns false if no collision is found, true if otherwise
-        left, top, right, bot = self.bounds
         lbound, tbound = check_location
+        rbound, bbound = check_location
+        left, top, right, bot = self.bounds
         lbound += left
         tbound += top
-        x, y = check_location
-        rbound, bbound = x + right, y + bot
+        rbound += right
+        bbound += bot
         for item in entity_list:
             if type(item) == type:  # check to see if the item is the desired type
                 if self.collision((lbound, tbound, rbound, bbound), item.get_bounds()):

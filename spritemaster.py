@@ -7,7 +7,7 @@ def get(string):
 
 
 sprites = {  # spritename, frames=0, origin=(0, 0), width=0, height=0, hitbox=(0, 0, 0, 0)
-    "player": Sprite('assets/sprites/Player.png', frames=2, width=37, speed=3),
+    "player": Sprite('assets/sprites/Player.png', origin=(19, 0), hitbox=(-16, 0, 15, 56), frames=2, width=37, speed=3),
     "stone": Sprite('assets/sprites/stone.png'),
     "darkstone": Sprite('assets/sprites/darkstone.png')
 

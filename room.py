@@ -46,10 +46,13 @@ class Room:
                 curr_sprite = self.spriteList[item.get_current_sprite()]
                 frame = item.advance_frame()
                 x, y = item.get_location()
+                flip = item.flip
                 or_x, or_y = curr_sprite.origin  # account for any skew from sprite origin
+                if item.flip:
+                    or_x = item.width - or_x
                 # check to see if the item is visible (if it is in the camera's view)
                 if (x + curr_sprite.get_width() - or_x >= camerax or x + or_x <= camerax + cameraw) and (y + curr_sprite.get_height() - or_y >= cameray or y + or_y <= cameray + camerah):
-                    blit_list.append((curr_sprite.get(), (x - camerax, y - cameray), curr_sprite.get_frame(frame)))
+                    blit_list.append((curr_sprite.get(), (x - or_x - camerax, y - or_y - cameray), curr_sprite.get_frame(frame), flip))
         return blit_list
 
     def get_live(self):
